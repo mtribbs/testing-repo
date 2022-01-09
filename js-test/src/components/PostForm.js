@@ -7,10 +7,10 @@ const PostForm = ({
   setSelectedImage,
   caption,
   setCaption,
-  handleSubmit,
+  handleSubmitPost,
 }) => {
   return (
-    <form onSubmit={handleSubmit} className="postForm">
+    <form onSubmit={handleSubmitPost} className="post-form">
       <label>Post subject</label>
       <input
         className="subjectInput"

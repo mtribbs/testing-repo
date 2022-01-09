@@ -1,9 +1,14 @@
 .App {
   display: flex;
+  flex-direction: column;
+}
+
+.form-box {
+  display: flex;
   justify-content: center;
 }
 
-.postForm {
+.post-form {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -19,4 +24,12 @@
 .captionInput {
   width: 300px;
   height: 200px;
+}
+
+.bio-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  margin: 10px;
+  min-height: 40vh;
 }

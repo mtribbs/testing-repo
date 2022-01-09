@@ -1,6 +1,6 @@
 import { useState } from "react";
 import PostForm from "./components/PostForm";
-import Feed from "./components/Feed";
+import BioForm from "./components/BioForm";
 import "./App.css";
 
 function App() {
@@ -24,22 +24,45 @@ function App() {
     ]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmitPost = (e) => {
     addPost();
+  };
+
+  const [name, setName] = useState("");
+  const [info, setInfo] = useState("");
+  const [bio, setBio] = useState([
+    {
+      bioName: "Name",
+      bioInfo: "Info",
+    },
+  ]);
+
+  const handleSubmitBio = (e) => {
+    console.log("Bio submit");
   };
 
   return (
     <div className="App">
-      <PostForm
-        subject={subject}
-        setSubject={setSubject}
-        selectedImage={selectedImage}
-        setSelectedImage={setSelectedImage}
-        caption={caption}
-        setCaption={setCaption}
-        handleSubmit={handleSubmit}
-      />
-      <Feed />
+      <div className="form-box">
+        <PostForm
+          subject={subject}
+          setSubject={setSubject}
+          selectedImage={selectedImage}
+          setSelectedImage={setSelectedImage}
+          caption={caption}
+          setCaption={setCaption}
+          handleSubmitPost={handleSubmitPost}
+        />
+      </div>
+      <div className="form-box">
+        <BioForm
+          name={name}
+          setName={setName}
+          info={info}
+          setInfo={setInfo}
+          handleSubmitBio={handleSubmitBio}
+        />
+      </div>
     </div>
   );
 }
