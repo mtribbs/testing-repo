@@ -1,45 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import PostForm from "./components/PostForm";
 import BioForm from "./components/BioForm";
 import "./App.css";
 
 function App() {
+
+  const firstRender = useRef(true);
+
   const [subject, setSubject] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
   const [caption, setCaption] = useState("");
   const [posts, setPosts] = useState([
     {
       postSubject: "Subject",
+      postImage: "Image",
       postCaption: "Caption",
     },
   ]);
 
-  const addPost = () => {
+  const addPost = (e) => {
+    e.preventDefault();
     setPosts([
       ...posts,
       {
         postSubject: subject,
+        postImage: selectedImage, 
         postCaption: caption,
       },
     ]);
   };
 
-  const handleSubmitPost = (e) => {
-    addPost();
-  };
 
-  const [name, setName] = useState("");
-  const [info, setInfo] = useState("");
-  const [bio, setBio] = useState([
-    {
-      bioName: "Name",
-      bioInfo: "Info",
-    },
-  ]);
 
-  const handleSubmitBio = (e) => {
-    console.log("Bio submit");
-  };
 
   return (
     <div className="App">
@@ -51,16 +43,7 @@ function App() {
           setSelectedImage={setSelectedImage}
           caption={caption}
           setCaption={setCaption}
-          handleSubmitPost={handleSubmitPost}
-        />
-      </div>
-      <div className="form-box">
-        <BioForm
-          name={name}
-          setName={setName}
-          info={info}
-          setInfo={setInfo}
-          handleSubmitBio={handleSubmitBio}
+          addPost={addPost}
         />
       </div>
     </div>
