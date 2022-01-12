@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 
 const PostForm = ({
   subject,
@@ -9,6 +9,8 @@ const PostForm = ({
   setCaption,
   addPost,
 }) => {
+  const fileInput = useRef(null);
+
   return (
     <form onSubmit={addPost} className="post-form">
       <label>Post subject</label>
@@ -22,9 +24,11 @@ const PostForm = ({
       <label>Image</label>
       <input
         type="file"
+        ref={fileInput}
         value={selectedImage}
-        onChange={(e) => setSelectedImage(e.target.files[0])}
+        onChange={(e) => setSelectedImage(e.target.files[null])}
       />
+
       <label className="captionLabel">Caption</label>
       <input
         className="captionInput"
