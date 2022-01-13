@@ -1,45 +1,69 @@
-import { useState } from "react";
-import PostForm from "./components/PostForm";
-import "./App.css";
+// import { useState, useRef, useEffect } from "react";
+// import PostForm from "./components/PostForm";
+// import "./App.css";
 
-function Post() {
-  const [subject, setSubject] = useState("");
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [caption, setCaption] = useState("");
-  const [posts, setPosts] = useState([
-    {
-      postSubject: "Subject",
-      postCaption: "Caption",
-    },
-  ]);
+// function Post() {
+//   const firstRender = useRef(true);
 
-  const addPost = () => {
-    setPosts([
-      ...posts,
-      {
-        postSubject: subject,
-        postCaption: caption,
-      },
-    ]);
-  };
+//   const [subject, setSubject] = useState("");
+//   const [caption, setCaption] = useState("");
+//   const [posts, setPosts] = useState([]);
 
-  const handleSubmitPost = (e) => {
-    addPost();
-  };
+//   const addPost = (e) => {
+//     e.preventDefault();
+//     setPosts([
+//       ...posts,
+//       {
+//         postSubject: subject,
+//         postCaption: caption,
+//         id: uuidv4(),
+//       },
+//     ]);
+//     setSubject("");
+//     setCaption("");
+//   };
 
-  return (
-    <div className="form-box">
-      <PostForm
-        subject={subject}
-        setSubject={setSubject}
-        selectedImage={selectedImage}
-        setSelectedImage={setSelectedImage}
-        caption={caption}
-        setCaption={setCaption}
-        handleSubmitPost={handleSubmitPost}
-      />
-    </div>
-  );
-}
+//   const removePost = (id) => {
+//     setPosts(posts.filter((post) => post.id !== id));
+//   };
 
-export default Post;
+//   useEffect(() => {
+//     if (firstRender.current) {
+//       console.log("true");
+//       firstRender.current = false;
+//     } else {
+//       localStorage.setItem("Post", JSON.stringify([...posts]));
+//       console.log("not first page load");
+//     }
+//   }, [posts]);
+
+//   useEffect(() => {
+//     if (localStorage.getItem("Post") !== null) {
+//       const newPosts = localStorage.getItem("Post");
+//       setPosts(JSON.parse([...posts, newPosts]));
+//     }
+//   }, []);
+
+//   return (
+//     <div className="App">
+//       <div className="form-box">
+//         <PostForm
+//           subject={subject}
+//           setSubject={setSubject}
+//           caption={caption}
+//           setCaption={setCaption}
+//           addPost={addPost}
+//         />
+//       </div>
+//       {posts.map((post) => (
+//         <div key={post.id}>
+//           <h2>{post.postSubject}</h2>
+//           <p>{post.postCaption}</p>
+//           <button onClick={() => removePost(post.id)}>Delete post</button>
+//         </div>
+//       ))}
+//     </div>
+//   );
+// }
+
+// export default Post;
