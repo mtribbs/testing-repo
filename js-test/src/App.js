@@ -7,7 +7,12 @@ function App() {
 
   const [subject, setSubject] = useState("");
   const [caption, setCaption] = useState("");
+  const [image, setImage] = useState([]);
   const [posts, setPosts] = useState([]);
+
+  const uploadHandler = () => {
+    console.log("hello");
+  };
 
   const addPost = (e) => {
     e.preventDefault();
@@ -16,6 +21,7 @@ function App() {
       {
         postSubject: subject,
         postCaption: caption,
+        postImage: image,
         id: uuidv4(),
       },
     ]);
@@ -44,6 +50,8 @@ function App() {
     }
   }, []);
 
+  const uploadHandler = () => {};
+
   return (
     <div className="App">
       <div className="form-box">
@@ -56,6 +64,9 @@ function App() {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
           />
+          <label className="captionLabel">Image</label>
+          <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+          <button>Upload</button>
           <label className="captionLabel">Caption</label>
           <input
             className="captionInput"
@@ -72,6 +83,7 @@ function App() {
       {posts.map((post) => (
         <div key={post.id}>
           <h2>{post.postSubject}</h2>
+          <img>{post.postImage}</img>
           <p>{post.postCaption}</p>
           <button onClick={() => removePost(post.id)}>Delete post</button>
         </div>
