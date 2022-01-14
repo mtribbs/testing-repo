@@ -1,92 +1,118 @@
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import "./App.css";
+import {
+  Form,
+  FormField,
+  FormTextArea,
+  Button,
+  FormGroup,
+  Card,
+  CardHeader,
+  CardDescription,
+} from "semantic-ui-react";
 
 function App() {
   const firstRender = useRef(true);
 
-  const [subject, setSubject] = useState("");
-  const [caption, setCaption] = useState("");
-  const [image, setImage] = useState([]);
-  const [posts, setPosts] = useState([]);
+  const [name, setName] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
+  const [currentBioId, setCurrentBioId] = useState(null);
+  const [bioInfo, setBioInfo] = useState([]);
 
-  const uploadHandler = () => {
-    console.log("hello");
+  const clearInputBio = () => {
+    setName("");
+    setAboutMe("");
   };
 
-  const addPost = (e) => {
-    e.preventDefault();
-    setPosts([
-      ...posts,
+  const addBio = () => {
+    setBioInfo([
+      ...bioInfo,
       {
-        postSubject: subject,
-        postCaption: caption,
-        postImage: image,
+        bioName: name,
+        bioAboutMe: aboutMe,
         id: uuidv4(),
       },
     ]);
-    setSubject("");
-    setCaption("");
+    clearInputBio();
   };
 
-  const removePost = (id) => {
-    setPosts(posts.filter((post) => post.id !== id));
+  const editBio = (bio) => {
+    setName(bio.bioName);
+    setAboutMe(bio.bioAboutMe);
+    setCurrentBioId(bio.bioId);
   };
+
+  const updateBio = () => {
+    setBioInfo(
+      bioInfo.map((bio) =>
+        bio.bioId === currentBioId
+          ? { ...bioInfo, bioName: name, bioAboutMe: aboutMe }
+          : bioInfo,
+      ),
+    );
+  };
+
+  const handleSumbit = (e) => {
+    e.preventDefault();
+    setCurrentBioId(null);
+    !currentBioId ? addBio() : updateBio();
+    clearInputBio();
+  };
+
+  // const removeBio = (id) => {
+  //   setBioInfo(bioInfo.filter((bio) => bio.id !== id));
+  // };
 
   useEffect(() => {
     if (firstRender.current) {
-      console.log("true");
       firstRender.current = false;
     } else {
-      localStorage.setItem("Post", JSON.stringify([...posts]));
-      console.log("not first page load");
+      localStorage.setItem("Bio", JSON.stringify([...bioInfo]));
     }
-  }, [posts]);
+  }, [bioInfo]);
 
   useEffect(() => {
-    if (localStorage.getItem("Post") !== null) {
-      const newPosts = localStorage.getItem("Post");
-      setPosts(JSON.parse([...posts, newPosts]));
+    if (localStorage.getItem("Bio") !== null) {
+      const newBio = localStorage.getItem("Bio");
+      setBioInfo(JSON.parse([...bioInfo, newBio]));
     }
   }, []);
 
-  const uploadHandler = () => {};
-
   return (
-    <div className="App">
-      <div className="form-box">
-        <form onSubmit={addPost} className="post-form">
-          <label>Post subject</label>
+    <div>
+      <Form onSubmit={handleSumbit}>
+        <FormGroup>
+          <label>Name</label>
           <input
             className="subjectInput"
             type="text"
-            placeholder="Enter post subject..."
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            placeholder="My name is..."
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
-          <label className="captionLabel">Image</label>
-          <input type="file" onChange={(e) => setImage(e.target.files[0])} />
-          <button>Upload</button>
-          <label className="captionLabel">Caption</label>
-          <input
+        </FormGroup>
+        <FormField>
+          <label className="captionLabel">About me</label>
+          <FormTextArea
             className="captionInput"
             type="text"
-            placeholder="Enter caption..."
-            value={caption}
-            onChange={(e) => setCaption(e.target.value)}
+            placeholder="About me..."
+            value={aboutMe}
+            onChange={(e) => setAboutMe(e.target.value)}
           />
-          <button type="submit" className="postBtn">
-            Post
-          </button>
-        </form>
-      </div>
-      {posts.map((post) => (
-        <div key={post.id}>
-          <h2>{post.postSubject}</h2>
-          <img>{post.postImage}</img>
-          <p>{post.postCaption}</p>
-          <button onClick={() => removePost(post.id)}>Delete post</button>
-        </div>
+        </FormField>
+
+        <Button type="submit" className="postBtn">
+          {currentBioId !== null ? "Update" : "Save"}
+        </Button>
+      </Form>
+      {bioInfo.map((bio) => (
+        <Card key={bio.id}>
+          <CardHeader>{bio.bioName}</CardHeader>
+          <CardDescription>{bio.bioAboutMe}</CardDescription>
+          {/* <button onClick={() => removeBio(bio.id)}>Delete</button> */}
+          <button onClick={() => editBio(bio)}>Edit</button>
+        </Card>
       ))}
     </div>
   );
