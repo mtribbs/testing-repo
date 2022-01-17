@@ -87,7 +87,10 @@ function App() {
           onChange={(e) => setSubject(e.target.value)}
         />
         <label className="captionLabel">Image</label>
-        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <input
+          type="file"
+          onChange={(e) => setSelectedImage(e.target.files[0])}
+        />
         <button>Upload</button>
         <label>Caption</label>
         <input
