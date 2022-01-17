@@ -1,15 +1,5 @@
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
-import {
-  Form,
-  FormField,
-  FormTextArea,
-  Button,
-  FormGroup,
-  Card,
-  CardHeader,
-  CardDescription,
-} from "semantic-ui-react";
 
 function App() {
   const firstRender = useRef(true);
@@ -80,39 +70,35 @@ function App() {
 
   return (
     <div>
-      <Form onSubmit={handleSumbit}>
-        <FormGroup>
-          <label>Name</label>
-          <input
-            className="subjectInput"
-            type="text"
-            placeholder="My name is..."
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </FormGroup>
-        <FormField>
-          <label className="captionLabel">About me</label>
-          <FormTextArea
-            className="captionInput"
-            type="text"
-            placeholder="About me..."
-            value={aboutMe}
-            onChange={(e) => setAboutMe(e.target.value)}
-          />
-        </FormField>
+      <form onSubmit={handleSumbit}>
+        <label>Name</label>
+        <input
+          className="subjectInput"
+          type="text"
+          placeholder="My name is..."
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+        <label className="captionLabel">About me</label>
+        <input
+          className="captionInput"
+          type="text"
+          placeholder="About me..."
+          value={aboutMe}
+          onChange={(e) => setAboutMe(e.target.value)}
+        />
 
-        <Button type="submit" className="postBtn">
+        <button type="submit" className="postBtn">
           {currentBioId !== null ? "Update" : "Save"}
-        </Button>
-      </Form>
+        </button>
+      </form>
       {bioInfo.map((bio) => (
-        <Card key={bio.id}>
-          <CardHeader>{bio.bioName}</CardHeader>
-          <CardDescription>{bio.bioAboutMe}</CardDescription>
+        <div key={bio.id}>
+          <h2>{bio.bioName}</h2>
+          <p>{bio.bioAboutMe}</p>
           {/* <button onClick={() => removeBio(bio.id)}>Delete</button> */}
           <button onClick={() => editBio(bio)}>Edit</button>
-        </Card>
+        </div>
       ))}
     </div>
   );
