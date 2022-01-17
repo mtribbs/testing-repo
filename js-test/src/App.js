@@ -1,107 +1,118 @@
 import { useState, useEffect, useRef } from "react";
 import { v4 as uuidv4 } from "uuid";
 
-function App() {
+function Post() {
   const firstRender = useRef(true);
 
-  const [name, setName] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
-  const [currentBioId, setCurrentBioId] = useState(null);
-  const [bioInfo, setBioInfo] = useState([]);
+  const [subject, setSubject] = useState("");
+  const [caption, setCaption] = useState("");
+  const [currentPostId, setCurrentPostId] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [posts, setPosts] = useState([]);
 
-  const clearInputBio = () => {
-    setName("");
-    setAboutMe("");
+  const clearInputPost = () => {
+    setSubject("");
+    setCaption("");
   };
 
-  const addBio = () => {
-    setBioInfo([
-      ...bioInfo,
+  const addPost = () => {
+    setPosts([
+      ...posts,
       {
-        bioName: name,
-        bioAboutMe: aboutMe,
+        postSubject: subject,
+        postCaption: caption,
+        postImage: selectedImage,
         id: uuidv4(),
       },
     ]);
-    clearInputBio();
+    clearInputPost();
   };
 
-  const editBio = (bio) => {
-    setName(bio.bioName);
-    setAboutMe(bio.bioAboutMe);
-    setCurrentBioId(bio.bioId);
+  const editPost = (post) => {
+    setSubject(post.postSubject);
+    setCaption(post.postCaption);
+    setSelectedImage(post.postImage);
+    setCurrentPostId(post.postId);
   };
 
-  const updateBio = () => {
-    setBioInfo(
-      bioInfo.map((bio) =>
-        bio.bioId === currentBioId
-          ? { ...bioInfo, bioName: name, bioAboutMe: aboutMe }
-          : bioInfo,
+  const updatePost = () => {
+    setPosts(
+      posts.map((post) =>
+        post.postId === currentPostId
+          ? {
+              ...posts,
+              postSubject: subject,
+              postCaption: caption,
+              postImage: selectedImage,
+            }
+          : post,
       ),
     );
   };
 
   const handleSumbit = (e) => {
     e.preventDefault();
-    setCurrentBioId(null);
-    !currentBioId ? addBio() : updateBio();
-    clearInputBio();
+    clearInputPost();
+    setCurrentPostId(null);
+    !currentPostId ? addPost() : updatePost();
   };
 
-  // const removeBio = (id) => {
-  //   setBioInfo(bioInfo.filter((bio) => bio.id !== id));
-  // };
+  const removePost = (id) => {
+    setPosts(posts.filter((post) => post.id !== id));
+  };
 
   useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
     } else {
-      localStorage.setItem("Bio", JSON.stringify([...bioInfo]));
+      localStorage.setItem("Post", JSON.stringify([...posts]));
     }
-  }, [bioInfo]);
+  }, [posts]);
 
   useEffect(() => {
-    if (localStorage.getItem("Bio") !== null) {
-      const newBio = localStorage.getItem("Bio");
-      setBioInfo(JSON.parse([...bioInfo, newBio]));
+    if (localStorage.getItem("Post") !== null) {
+      const newPosts = localStorage.getItem("Post");
+      setPosts(JSON.parse([...posts, newPosts]));
     }
   }, []);
 
   return (
     <div>
       <form onSubmit={handleSumbit}>
-        <label>Name</label>
+        <label>Post subject</label>
         <input
-          className="subjectInput"
           type="text"
-          placeholder="My name is..."
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter post subject..."
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
         />
-        <label className="captionLabel">About me</label>
+        <label className="captionLabel">Image</label>
+        <input type="file" onChange={(e) => setImage(e.target.files[0])} />
+        <button>Upload</button>
+        <label>Caption</label>
         <input
-          className="captionInput"
           type="text"
-          placeholder="About me..."
-          value={aboutMe}
-          onChange={(e) => setAboutMe(e.target.value)}
+          placeholder="Enter caption..."
+          value={caption}
+          onChange={(e) => setCaption(e.target.value)}
         />
-
-        <button type="submit" className="postBtn">
-          {currentBioId !== null ? "Update" : "Save"}
+        <button type="submit">
+          {currentPostId !== null ? "Update" : "Post"}
         </button>
       </form>
-      {bioInfo.map((bio) => (
-        <div key={bio.id}>
-          <h2>{bio.bioName}</h2>
-          <p>{bio.bioAboutMe}</p>
-          {/* <button onClick={() => removeBio(bio.id)}>Delete</button> */}
-          <button onClick={() => editBio(bio)}>Edit</button>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h2>{post.postSubject}</h2>
+          <img>{post.postImage}</img>
+          <p>{post.postCaption}</p>
+          <button secondary onClick={() => removePost(post.id)}>
+            Delete post
+          </button>
+          <button onClick={() => editPost(post)}>Edit post</button>
         </div>
       ))}
     </div>
   );
 }
 
-export default App;
+export default Post;
